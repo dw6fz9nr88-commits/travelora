@@ -21,6 +21,17 @@
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
+:focus-visible { outline: 3px solid var(--orange); outline-offset: 3px; }
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.hero > div:first-child { animation: rise-in .65s ease both; }
+.hero-image { animation: rise-in .8s .1s ease both; }
+.card { animation: rise-in .55s ease both; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
 body {
   background: var(--bg);
   color: var(--ink);
@@ -116,6 +127,14 @@ h2 { font-size: clamp(30px, 4vw, 45px); letter-spacing: -1.7px; line-height: 1.1
   padding: 9px 17px; border-radius: 30px; font-size: 13px;
 }
 .filter.active { background: var(--ink); color: white; border-color: var(--ink); }
+.search-wrap { margin: 0 0 24px; }
+.search-input {
+  width: 100%; max-width: 440px; border: 1px solid #deded5;
+  background: #fff; color: var(--ink); padding: 13px 17px;
+  border-radius: 14px; outline: none;
+}
+.search-input:focus { border-color: var(--green); box-shadow: 0 0 0 3px #245e4b18; }
+.search-input::placeholder { color: #92978f; }
 
 .destinations {
   display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px;
@@ -277,6 +296,10 @@ footer .logo { color: var(--ink); font-size: 20px; }
         <button class="filter" data-filter="saved" data-i18n="saved">♥ Ulubione</button>
       </div>
 
+      <div class="search-wrap">
+        <input id="destinationSearch" class="search-input" type="search" data-i18n-placeholder="searchPlaceholder" placeholder="Szukaj miejsca lub kraju..." aria-label="Search destinations">
+      </div>
+
       <div class="destinations" id="destinationGrid">
         <article class="card" data-category="beach" data-id="bali">
           <div class="card-image">
@@ -325,6 +348,39 @@ footer .logo { color: var(--ink); font-size: 20px; }
             <div class="card-bottom">
               <div class="price"><strong>€729</strong><span data-i18n="from">od / osoba</span></div>
               <button class="details" data-place="madeira" data-i18n="details">Poznaj ↗</button>
+            </div>
+          </div>
+        </article>
+        <article class="card" data-category="beach" data-id="santorini">
+          <div class="card-image">
+            <img src="https://images.unsplash.com/photo-1613395877344-13d4a8e0d49e?auto=format&fit=crop&w=900&q=85" alt="Białe domy na Santorini" loading="lazy">
+            <span class="tag" data-i18n="europe">EUROPA</span>
+            <button class="favorite" aria-label="Add to favorites" aria-pressed="false">♡</button>
+          </div>
+          <div class="card-body">
+            <div class="location">GRECJA · EUROPA</div>
+            <h3>Santorini</h3>
+            <p class="card-desc" data-i18n="santoriniDesc">Białe domy, błękitne kopuły i zachody słońca.</p>
+            <div class="card-bottom">
+              <div class="price"><strong>€799</strong><span data-i18n="from">od / osoba</span></div>
+              <button class="details" data-place="santorini" data-i18n="details">Poznaj ↗</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="card" data-category="city" data-id="kyoto">
+          <div class="card-image">
+            <img src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=900&q=85" alt="Tradycyjna ulica w Kioto" loading="lazy">
+            <span class="tag" data-i18n="popular">POPULARNY</span>
+            <button class="favorite" aria-label="Add to favorites" aria-pressed="false">♡</button>
+          </div>
+          <div class="card-body">
+            <div class="location">JAPONIA · AZJA</div>
+            <h3>Kyoto</h3>
+            <p class="card-desc" data-i18n="kyotoDesc">Świątynie, ogrody i tradycyjna japońska kultura.</p>
+            <div class="card-bottom">
+              <div class="price"><strong>€1,099</strong><span data-i18n="from">od / osoba</span></div>
+              <button class="details" data-place="kyoto" data-i18n="details">Poznaj ↗</button>
             </div>
           </div>
         </article>
@@ -388,6 +444,12 @@ const translations = {
     contactText:"Wymarzona podróż zaczyna się od jednego pomysłu. Wybierz kierunek i ruszaj odkrywać świat.",
     chooseTrip:"Wybierz podróż ↗",footerText:"Podróżuj dalej. Odkrywaj więcej.",
     empty:"Nie masz jeszcze ulubionych kierunków.",
+    searchPlaceholder:"Szukaj miejsca lub kraju...",
+    searchEmpty:"Nie znaleziono pasujących kierunków.",
+    santoriniDesc:"Białe domy, błękitne kopuły i zachody słońca.",
+    kyotoDesc:"Świątynie, ogrody i tradycyjna japońska kultura.",
+    santoriniInfo:"Santorini: białe miasteczka, wulkaniczne klify, lokalna kuchnia i widoki na Morze Egejskie.",
+    kyotoInfo:"Kioto: historyczne świątynie, spokojne ogrody, tradycyjne uliczki i japońska kultura.",
     savedMsg:"Dodano do ulubionych ♥",removedMsg:"Usunięto z ulubionych",
     baliInfo:"Bali: tropikalne plaże, świątynie, zielone tarasy ryżowe i niezapomniane zachody słońca.",
     cinqueInfo:"Cinque Terre: pięć kolorowych miasteczek na włoskim wybrzeżu, szlaki spacerowe i lokalna kuchnia.",
@@ -417,6 +479,12 @@ const translations = {
     contactText:"Your dream trip starts with one idea. Choose a destination and go explore the world.",
     chooseTrip:"Choose a trip ↗",footerText:"Travel further. Discover more.",
     empty:"You don't have any favorite destinations yet.",
+    searchPlaceholder:"Search a destination or country...",
+    searchEmpty:"No matching destinations found.",
+    santoriniDesc:"Whitewashed houses, blue domes, and sunset views.",
+    kyotoDesc:"Temples, gardens, and traditional Japanese culture.",
+    santoriniInfo:"Santorini: whitewashed villages, volcanic cliffs, local cuisine, and views over the Aegean Sea.",
+    kyotoInfo:"Kyoto: historic temples, peaceful gardens, traditional streets, and Japanese culture.",
     savedMsg:"Added to favorites ♥",removedMsg:"Removed from favorites",
     baliInfo:"Bali: tropical beaches, temples, lush rice terraces, and unforgettable sunsets.",
     cinqueInfo:"Cinque Terre: five colorful Italian coastal villages, walking trails, and local cuisine.",
@@ -446,6 +514,12 @@ const translations = {
     contactText:"Путешествие мечты начинается с одной идеи. Выбери направление и отправляйся открывать мир.",
     chooseTrip:"Выбрать путешествие ↗",footerText:"Путешествуй дальше. Открывай больше.",
     empty:"Пока нет избранных направлений.",
+    searchPlaceholder:"Поиск места или страны...",
+    searchEmpty:"Подходящие направления не найдены.",
+    santoriniDesc:"Белые дома, голубые купола и красивые закаты.",
+    kyotoDesc:"Храмы, сады и традиционная японская культура.",
+    santoriniInfo:"Санторини: белые городки, вулканические скалы, местная кухня и виды на Эгейское море.",
+    kyotoInfo:"Киото: старинные храмы, тихие сады, традиционные улочки и японская культура.",
     savedMsg:"Добавлено в избранное ♥",removedMsg:"Удалено из избранного",
     baliInfo:"Бали: тропические пляжи, храмы, зелёные рисовые террасы и незабываемые закаты.",
     cinqueInfo:"Чинкве-Терре: пять красочных городков на побережье Италии, пешеходные маршруты и местная кухня.",
@@ -497,12 +571,15 @@ function setLanguage(lang) {
 
 function applyFilter() {
   const cards = [...document.querySelectorAll(".card")];
+  const query = (document.getElementById("destinationSearch")?.value || "").trim().toLocaleLowerCase();
   let visible = 0;
 
   cards.forEach(card => {
-    const matches = currentFilter === "all" ||
+    const matchesCategory = currentFilter === "all" ||
       (currentFilter === "saved" ? favorites.has(card.dataset.id) :
        card.dataset.category === currentFilter);
+    const matchesSearch = !query || card.textContent.toLocaleLowerCase().includes(query);
+    const matches = matchesCategory && matchesSearch;
     card.style.display = matches ? "" : "none";
     if (matches) visible++;
   });
@@ -515,7 +592,9 @@ function applyFilter() {
       empty.className = "empty";
       grid.appendChild(empty);
     }
-    empty.textContent = translations[currentLang].empty;
+    empty.textContent = currentFilter === "saved" && !query
+      ? translations[currentLang].empty
+      : translations[currentLang].searchEmpty;
   } else if (empty) {
     empty.remove();
   }
@@ -524,6 +603,8 @@ function applyFilter() {
 document.querySelectorAll("[data-lang]").forEach(btn => {
   btn.addEventListener("click", () => setLanguage(btn.dataset.lang));
 });
+
+document.getElementById("destinationSearch").addEventListener("input", applyFilter);
 
 document.querySelectorAll(".filter").forEach(btn => {
   btn.addEventListener("click", () => {
